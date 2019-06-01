@@ -1,0 +1,225 @@
+html {
+	height: 100%;
+	margin: 0px; padding: 0px; 
+	font-size: 62.5%;
+}
+
+body {
+	height: 100%;
+	margin: 0px; padding: 0px; 
+	display: flex; flex-direction: column;
+	background-color: black; color: white;
+	font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 300;
+}
+
+/* ------------------------------ MAIN SCREEN ------------------------------ */
+
+#mainscreen {
+	flex-grow: 9;
+	display: flex; flex-direction: column; align-items: center;
+	background-color: black;
+}
+
+/* ------------------------------ CHORD SLIDE-SHOW ------------------------------ */
+
+#chord-ss {
+	flex-grow: 1;
+	width: 100%;
+	display: flex; align-items: center; justify-content: space-around;
+}
+
+.chord-ss-xs {
+	flex-basis: 10%;
+	font-size: 4vw;
+	color: #505050;
+}
+
+.chord-ss-sm {
+	flex-basis: 20%;
+	font-size: 8vw;
+	color: #909090;
+}
+
+.chord-ss-md {
+	flex-basis: 40%;
+	font-size: 16vw;
+	color: #ffffff;
+}
+
+/* ------------------------------ CHORD ------------------------------ */
+
+.chord {
+	flex-grow: 1;
+	display: flex; flex-direction: column; align-items: center; justify-content: space-around;
+}
+
+.chord .key {
+	font-size: 15vw;
+}
+
+.chord .subkey {
+	font-size: 7vw;
+}
+
+.chord .value {
+	font-size: 7vw;
+}
+
+/* ------------------------------ PORTEE ------------------------------ */
+
+.portee {
+	margin-top: 2%;
+	width: 95%;
+	display: flex; flex-direction: column; 
+}
+
+.portee .line {
+	position: relative;
+	height: 10px;
+}
+
+.portee .line:nth-child(2n+0) {
+ 	border-bottom: 1px solid #404040; 
+/* 	border-bottom: 1px solid red; */
+}
+
+.portee .line:nth-child(2n+6):nth-child(-n+14) {
+	border-bottom: 2px solid #909090;
+}
+
+.portee .line:nth-child(0n+9) {
+	position: relative; /* To add text in it */
+}
+
+img.g-clef {
+	display: block;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	transform: translate(50%, 0%) scale(3);
+}
+
+img.f-clef {
+	display: block;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	transform: translate(200%, 25%) scale(4.5);
+}
+
+.portee .line .note {
+	z-index: 1000;
+	position: absolute;
+	font-size: 9rem;
+	line-height: 0;
+}
+
+.portee .line .note.middle {
+	color: yellow;
+	text-shadow: -2px 2px 4px #F00,
+				  2px 2px 4px #F00,
+				  2px -2px 0 #F00,
+				  -2px -2px 0 #F00;
+}
+
+/* ------------------------------ EXO BAR ------------------------------ */
+
+#exobar {
+	display: flex; 
+}
+
+#exobar-btn {
+	display: flex; 
+}
+
+#exobar-btn a {
+	color: white;
+	text-decoration: none;
+	transition: all 0.2s ease-in-out;
+}
+
+#exobar-btn a:hover,
+#exobar-btn a:focus,
+#exobar-btn a:active {
+	background-color: white; color: blue;
+	text-decoration: none;
+}
+
+.eb-entry {
+	margin: 15px; padding: 10px;
+	display: flex; align-items: center; justify-content: center;
+	background-color: blue;
+	font-size: 1.5vw;
+}
+
+#exobar-info {
+	margin-left: 15px;
+	display: flex; align-items: center;
+	font-size: 1.5vw;
+}
+
+/* ------------------------------ TOOL BAR ------------------------------ */
+
+#toolbar {
+	flex-grow: 1;
+	display: flex; 
+}
+
+#toolbar a {
+	color: white;
+	text-decoration: none;
+	transition: all 0.2s ease-in-out;
+}
+
+#toolbar a:hover,
+#toolbar a:focus,
+#toolbar a:active {
+	background-color: white; color: red;
+	text-decoration: none;
+}
+
+#toolbar .tb-entry {
+	margin: 15px;
+	flex-grow: 1;
+	display: flex; align-items: center; justify-content: center;
+	background-color: red;
+	font-size: 2vw;
+    text-align: center;
+}
+
+#toolbar .tb-entry.todo {
+	filter: grayscale();
+}
+
+#toolbar a.active {
+	background-color: white; color: red;
+}
+
+/* ------------------------------ ABOUT ------------------------------ */
+
+#about {
+	padding: 30px;
+	font-size: 2rem;
+	text-align: justify;
+}
+
+#about h1 {
+	text-align: center;
+	font-size: 8rem;
+}
+
+#about h1 > a {
+	color: red;
+	text-decoration: none;
+}
+
+#about h1 > a:hover,
+#about h1 > a:focus,
+#about h1 > a:active {
+	border-bottom: 3px solid blue;
+}
+
+#about h2 {
+	font-size: 4rem;
+}
+
