@@ -146,7 +146,10 @@ function notesViaIntervalMacro () {
 
 var diff = 0; /* 0 = facile, 1 = difficile */ 
 
-var lectureCleIntervalDelay = 1000;
+var scrollLoopMax = 200;  
+var scrollLoop    = scrollLoopMax;  
+
+var lectureCleIntervalDelay = 1000 / scrollLoopMax;
 var lectureCleInterval;
 
 var nbNotes = 20;
@@ -156,8 +159,8 @@ var notePositions = [];
 var stepType = 0; /* Montée par intervalle. 0 = au hasard. */
 var stepNum = 0;  /* Durée de la montée par intervalle, en nombre de notes restantes. */
 
-function lectureCleAdd ( add ) {
-	lectureCleIntervalDelay = Math.max(lectureCleIntervalDelay + add, 250);
+function lectureCleMult ( mult ) {
+	lectureCleIntervalDelay = lectureCleIntervalDelay * mult;
 	lectureCleDisplayInfos ();
 
 	clearInterval( lectureCleInterval );
@@ -193,51 +196,58 @@ function lectureClePlay ( ) {
 }
 
 function lectureCleStep() {
+	
 	$( '#mainscreen .portee .line .note' ).remove ( );
 
-	// Supprime la dernière note si l'on est au maximum de notes.
-	if ( notePositions.length == nbNotes ) 
-		notePositions.shift();
-		
-	// Ajout d'une nouvelle note.
-	var cleNum;
-	var lineNum;
-	var lastNote = notePositions[ notePositions.length - 1 ]; // May be undefined if empty array
-	if ( (notePositions.length == 0) || (stepNum == 0) || (lastNote.line + stepType > (diff==0?14:18)) || (lastNote.line + stepType < (diff==0?5:1)) ) {
+	scrollLoop++;
+	if ( scrollLoop >= scrollLoopMax ) {
+	
+		// Supprime la dernière note si l'on est au maximum de notes.
+		if ( notePositions.length == nbNotes ) 
+			notePositions.shift();
+			
+		// Ajout d'une nouvelle note.
+		var cleNum;
+		var lineNum;
+		var lastNote = notePositions[ notePositions.length - 1 ]; // May be undefined if empty array
+		if ( (notePositions.length == 0) || (stepNum == 0) || (lastNote.line + stepType > (diff==0?14:18)) || (lastNote.line + stepType < (diff==0?5:1)) ) {
 
-		// On enclenche une nouvelle section si la précédente est terminée, ou que l'on est hors de portée.
-		stepType = getRandomInt((diff==0?2:4));                                             // Intervalle de la montée. 0 = note au hasard. 
-		if ( getRandomInt(2) == 1 ) stepType = 0 - stepType;                                // On monte plutôt que de descendre.
-		stepNum = getRandomInt((diff==0?6:3)) + 1;                                          // Nombre de pas.
+			// On enclenche une nouvelle section si la précédente est terminée, ou que l'on est hors de portée.
+			stepType = getRandomInt((diff==0?2:4));                                             // Intervalle de la montée. 0 = note au hasard. 
+			if ( getRandomInt(2) == 1 ) stepType = 0 - stepType;                                // On monte plutôt que de descendre.
+			stepNum = getRandomInt((diff==0?6:3)) + 1;                                          // Nombre de pas.
 
-		cleNum = getRandomInt(2) + 1;                                                       // Clé de la portée
-		if (diff == 0)                                                                      // Ligne de démarrage.
-			lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 4;  
-		else
-			lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 1;  
-	} else {
-		// On poursuit la section en cours
-		if (stepType == 0) {
-			if (diff == 0)                                                                      // Ligne de démarrage.
-				cleNum = lastNote.cle;
-			else
-				cleNum = getRandomInt(2) + 1;                                                   // Clé de la portée
+			cleNum = getRandomInt(2) + 1;                                                       // Clé de la portée
 			if (diff == 0)                                                                      // Ligne de démarrage.
 				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 4;  
 			else
 				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 1;  
 		} else {
-			cleNum  = lastNote.cle;
-			lineNum = lastNote.line + stepType;
+			// On poursuit la section en cours
+			if (stepType == 0) {
+				if (diff == 0)                                                                      // Ligne de démarrage.
+					cleNum = lastNote.cle;
+				else
+					cleNum = getRandomInt(2) + 1;                                                   // Clé de la portée
+				if (diff == 0)                                                                      // Ligne de démarrage.
+					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 4;  
+				else
+					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 1;  
+			} else {
+				cleNum  = lastNote.cle;
+				lineNum = lastNote.line + stepType;
+			}
+			stepNum--;
 		}
-		stepNum--;
+		
+		notePositions.push( { cle:cleNum, line:lineNum, left:100 } );
+
+		scrollLoop = 0;
 	}
 	
-	notePositions.push( { cle:cleNum, line:lineNum, left:100 } );
-
 	// Décalage (scrolling) des notes.
 	notePositions.forEach ( function (element) {
-		element.left = element.left - (90 / nbNotes);
+		element.left = element.left - (90 / nbNotes / scrollLoopMax);
 	});	
 	
 	notePositions.forEach ( function (element, index, array) {
@@ -256,8 +266,8 @@ function lectureCle () {
 	addPortee( "g-clef", 8 );
 	addPortee( "f-clef", 8 );
 	
-	$( '#exobar-btn'  ).html( '<a href="#" onclick="lectureCleAdd   (250)  ;" class="eb-entry">Ralentir</a>' + 
-	                          '<a href="#" onclick="lectureCleAdd   (-250) ;" class="eb-entry">Accélerer</a>' + 
+	$( '#exobar-btn'  ).html( '<a href="#" onclick="lectureCleMult  (1.33) ;" class="eb-entry">Ralentir</a>' + 
+	                          '<a href="#" onclick="lectureCleMult  (0.66) ;" class="eb-entry">Accélerer</a>' + 
 	                          '<a href="#" onclick="lectureCleDiff  (this) ;" class="eb-entry">Plus dur !</a>' + 
 	                          '<a href="#" onclick="lectureClePause ()     ;" class="eb-entry"><i class="material-icons">pause</i></a>' + 
 	                          '<a href="#" onclick="lectureClePlay  ()     ;" class="eb-entry"><i class="material-icons">play_arrow</i></a>' );
