@@ -115,7 +115,7 @@ img.f-clef {
 }
 
 .portee .line:nth-child(odd) .note {		
-	top:-10px;
+	top:-1px;
 }
 
 .portee .line .note.middle {
@@ -129,12 +129,6 @@ img.f-clef {
 @media screen and (max-width: 600px) {
 	.portee .line .note {		
 		top: 1px;
-		color:green;
-	}
-
-	.portee .line:nth-child(odd) .note {		
-		top: 0px;
-		color:blue;
 	}
 }
 
