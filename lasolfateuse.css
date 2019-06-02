@@ -115,7 +115,7 @@ img.f-clef {
 }
 
 .portee .line:nth-child(odd) .note {		
-	top:-1px;
+	top:-10px;
 }
 
 .portee .line .note.middle {
