@@ -118,13 +118,13 @@ img.f-clef {
 	top:-1px;
 }
 
-/* .portee .line .note.middle {
+.portee .line .note.middle {
 	color: yellow;
 	text-shadow: -2px 2px 4px #F00,
 				  2px 2px 4px #F00,
 				  2px -2px 0 #F00,
 				  -2px -2px 0 #F00;
-} */
+}
 
 @media screen and (max-width: 600px) {
 	.portee .line .note {		
@@ -232,3 +232,4 @@ img.f-clef {
 #about h2 {
 	font-size: 4rem;
 }
+
