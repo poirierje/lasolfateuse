@@ -146,8 +146,9 @@ function notesViaIntervalMacro () {
 
 var diff = 0; /* 0 = facile, 1 = difficile */ 
 
-var scrollLoopMax = 200;  
-var scrollLoop    = scrollLoopMax;  
+var scrollLoopMax  = 50;  
+var scrollLoop     = scrollLoopMax;  
+var scrollLoopStep = 1;  
 
 var lectureCleIntervalDelay = 1000 / scrollLoopMax;
 var lectureCleInterval;
@@ -199,7 +200,7 @@ function lectureCleStep() {
 	
 	$( '#mainscreen .portee .line .note' ).remove ( );
 
-	scrollLoop++;
+	scrollLoop = scrollLoop + scrollLoopStep;
 	if ( scrollLoop >= scrollLoopMax ) {
 	
 		// Supprime la dernière note si l'on est au maximum de notes.
