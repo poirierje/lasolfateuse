@@ -144,7 +144,7 @@ function notesViaIntervalMacro () {
 // * LECTURE-CLE LECTURE-CLE LECTURE-CLE LECTURE-CLE LECTURE-CLE LECTURE-CLE LECTURE-CLE LECTU * 
 // *********************************************************************************************
 
-var diff = 0; /* 0 = facile, 1 = difficile */ 
+var hard = 0; /* 0 = facile, 1 = difficile */ 
 
 var scrollLoopMax  = 50;  
 var scrollLoop     = scrollLoopMax;  
@@ -172,11 +172,11 @@ function lectureCleMult ( mult ) {
 }
 
 function lectureCleDiff ( ) {
-	if (diff == 0) {
-		diff = 1;
+	if (hard == 0) {
+		hard = 1;
 		$( '#exobar-btn a:nth-of-type(3)' ).html( 'Plus facile !');
 	} else {
-		diff = 0;
+		hard = 0;
 		$( '#exobar-btn a:nth-of-type(3)' ).html( 'Plus dur !');
 	}
 	lectureCleDisplayInfos ();
@@ -211,29 +211,29 @@ function lectureCleStep() {
 		var cleNum;
 		var lineNum;
 		var lastNote = notePositions[ notePositions.length - 1 ]; // May be undefined if empty array
-		if ( (notePositions.length == 0) || (stepNum == 0) || (lastNote.line + stepType > (diff==0?14:18)) || (lastNote.line + stepType < (diff==0?5:1)) ) {
+		if ( (notePositions.length == 0) || (stepNum == 0) || (lastNote.line + stepType > ((hard==0)?14:18)) || (lastNote.line + stepType < ((hard==0)?5:1)) ) {
 
 			// On enclenche une nouvelle section si la précédente est terminée, ou que l'on est hors de portée.
-			stepType = getRandomInt((diff==0?2:4));                                             // Intervalle de la montée. 0 = note au hasard. 
-			if ( getRandomInt(2) == 1 ) stepType = 0 - stepType;                                // On monte plutôt que de descendre.
-			stepNum = getRandomInt((diff==0?6:3)) + 1;                                          // Nombre de pas.
+			stepType = getRandomInt((hard==0)?3:4);                                             // Intervalle de la montée. 0 = note au hasard. 
+			if ( getRandomInt(2) == 1 ) stepType = 0 - stepType;                                // On monte chérie ? Ou on descend ?
+			stepNum = getRandomInt((hard==0)?6:4) + 1;                                          // Nombre de pas.
 
 			cleNum = getRandomInt(2) + 1;                                                       // Clé de la portée
-			if (diff == 0)                                                                      // Ligne de démarrage.
-				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 4;  
+			if (hard == 0)                                                                      // Ligne de démarrage.
+				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 6;  
 			else
-				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 1;  
+				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 2;  
 		} else {
 			// On poursuit la section en cours
 			if (stepType == 0) {
-				if (diff == 0)                                                                      // Ligne de démarrage.
+				if (hard == 0)                                                                      // Ligne de démarrage.
 					cleNum = lastNote.cle;
 				else
 					cleNum = getRandomInt(2) + 1;                                                   // Clé de la portée
-				if (diff == 0)                                                                      // Ligne de démarrage.
-					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 4;  
+				if (hard == 0)                                                                      // Ligne de démarrage.
+					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 6;  
 				else
-					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 1;  
+					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 2;  
 			} else {
 				cleNum  = lastNote.cle;
 				lineNum = lastNote.line + stepType;
@@ -241,25 +241,26 @@ function lectureCleStep() {
 			stepNum--;
 		}
 		
-		notePositions.push( { cle:cleNum, line:lineNum, left:100 } );
+		notePositions.push( { cle:cleNum, line:lineNum, left:95 } );
 
 		scrollLoop = 0;
 	}
 	
 	// Décalage (scrolling) des notes.
 	notePositions.forEach ( function (element) {
-		element.left = element.left - (90 / nbNotes / scrollLoopMax);
+		element.left = element.left - (90 / (nbNotes+1) / scrollLoopMax);
 	});	
 	
 	notePositions.forEach ( function (element, index, array) {
-		$( '#mainscreen .portee:nth-child(' + element.cle + ') .line:nth-child(' + element.line + ')' ).append ( '<div class="note' + ((array.length-index)==11?' middle':'') + '" style="left:' + element.left + '%">&#119128;</div>' );
-	});	
+//		$( '#mainscreen .portee:nth-child(' + element.cle + ') .line:nth-child(' + element.line + ')' ).append ( '<div class="note' + ((array.length-index)==11?' middle':'') + '" style="left:' + element.left + '%">&#119128;</div>' );
+	$( '#mainscreen .portee:nth-child(' + element.cle + ') .line:nth-child(' + element.line + ')' ).append ( '<div class="note' + ((array.length-index)==11?' middle':'') + '" style="left:' + element.left + '%">●</div>' );
+});	
 
 	/* $( '#exobar-info' ).html( 'stepType='+stepType+' stepNum='+stepNum+' lineNum='+lineNum+' cle='+cleNum); */
 }
 
 function lectureCleDisplayInfos ( str ) {
-	$( '#exobar-info' ).html( (diff == 0 ? 'Mode 🌺 facile' : 'Mode 💀 difficile') + ' - Délai : ' + lectureCleIntervalDelay.toLocaleString() + ' ms' + (str ? str : ''));
+	$( '#exobar-info' ).html( ((hard == 0) ? 'Mode 🌺 facile' : 'Mode 💀 difficile') /* + ' - Délai : ' + lectureCleIntervalDelay.toLocaleString() + ' ms' */ + (str ? str : '') );
 }
 
 function lectureCle () {

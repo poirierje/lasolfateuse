@@ -110,8 +110,9 @@ img.f-clef {
 .portee .line .note {
 	z-index: 1000;
 	position: absolute;
-	font-size: 9rem;
+	font-size: 5rem;
 	line-height: 0;
+	transform: rotate(75deg); 
 }
 
 .portee .line:nth-child(odd) .note {		
