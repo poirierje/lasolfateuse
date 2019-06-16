@@ -11,9 +11,75 @@
 		<div id="about">
 			<h1><a href="lasolfateuse.html">La solfateuse</a></h1>
 			
-			<h2>&Agrave; propos</h2>
-			<div>La solfateuse a &eacute;t&eacute; d&eacute;velopp&eacute;e par J&eacute;j&eacute;. Ce petit utilitaire a vocation &agrave; aider tout un chacun dans l'apprentissage du solf&egrave;ge, via quelques petits jeux de lecture de note, de travail d'accords, etc. Contrairement aux jeux que l'on peut trouver par foison sur Internet, celui-ci n'offre pas de moyen d'indiquer ses r&eacute;ponses. <strong>C'est une volont&eacute; !</strong> &Agrave; l'initiative de ce jeu ! Elle vise &agrave; &eacute;viter de d&eacute;velopper des automatismes entre les r&eacute;ponses et le m&eacute;canisme visuel et physiologique de l'interaction permettant d'indiquer sa r&eacute;ponse, qui pourrait d&eacute;centrer l'attention de l'usager de la cible premi&egrave;re : le travail intellectuel sur les notions solf&eacute;giques.</div>
+			<h2>L'interview</h2>
+
+			<div class="remark">(cliquez sur les boutons bleus)</div>
+
+			<button onClick="toggle('a1')">La solfateuse ? C'est quoi ?</button>
+			<div id="a1" class="answer" style="display:none">
+				<p>La solfateuse est un petit utilitaire qui a vocation à aider tout un chacun dans l'apprentissage du solfège, via quelques petits jeux - assez magnifiques - de lecture de notes, de constitution d'accords, etc.</p>
+				<p>C'est le top.</p>
+				
+				<button onClick="toggle('a2')">Le top ? Mais quelles différences avec la multitude qui existe déjà ?</button>
+				<div id="a2" class="answer" style="display:none">
+					<p>C'est mieux.</p>
+
+					<button onClick="toggle('a3')">Mieux que TOUS les autres utilitaires !?!</button>
+					<div id="a3" class="answer" style="display:none">
+						<p>C'éclair !!!</p>
+						<p><img src="ceclair.jpg"></p>
+						
+						<button onClick="toggle('a4')">Mais qu'a-t-il de plus que les autres ?</button>
+						<div id="a4" class="answer" style="display:none">
+							<p>Ce qu'il a de plus, c'est qu'il en fait moins.</p>
+
+							<button onClick="toggle('a5')">Vous m'effrayez...</button>
+							<div id="a5" class="answer" style="display:none">
+								<p>Contrairement aux autres applications, celle-ci limite ses interactions avec l'utilisateur, et ne cherche pas à demander la réponse. <strong>C'est une volont&eacute; !</strong> &Agrave; 
+									l'initiative de ce jeu ! Elle vise &agrave; &eacute;viter de d&eacute;velopper des automatismes entre les r&eacute;ponses et le m&eacute;canisme visuel et physiologique de l'interaction permettant
+									 d'indiquer sa r&eacute;ponse, qui pourrait d&eacute;centrer l'attention de l'usager de la cible premi&egrave;re : le travail intellectuel sur les notions solf&eacute;giques.
+								</p>
+								<p>Bref, il va à l'essentiel.</p>
+								
+								<button onClick="toggle('a6')">Conclusion ?</button>
+								<div id="a6" class="answer" style="display:none">
+									<p>C'émieux !!!</p>
+									<p><img src="ceclair.jpg"></p>
+												
+									<button onClick="toggle('a7')">Quel est le tordu qui a développé ce truc ?</button>
+									<div id="a7" class="answer" style="display:none">
+										<p>La solfateuse a été développée par Jéjé La Fripouille, dit "La Poirâsse".</p>
+												
+										<button onClick="toggle('a8')">Hum. Merci, au revoir.</button>
+										<div id="a8" class="answer" style="display:none">
+											<p><img class="bnw" src="fmurr.jpg"></p>
+										</div>	
+									</div>	
+								</div>	
+							</div>	
+						</div>	
+					</div>
+				</div>
+			</div>
+
+			<div class="retour">
+				<a href="lasolfateuse.html">Cliquez ici pour retourner sur l'application.</a>
+			</div>
+			
 		</div>
+
+		<script>
+			function toggle( idDiv ) {
+				var x = document.getElementById(idDiv);
+				console.log( x );
+				console.log( x.style.display );
+				if (x.style.display === "none") {
+					x.style.display = "block";
+				} else {
+					x.style.display = "none";
+				}
+			}
+		</script>
 
 	</body>
 

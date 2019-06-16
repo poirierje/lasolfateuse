@@ -141,6 +141,8 @@ img.f-clef {
 
 #exobar-btn {
 	display: flex; 
+	flex-grow: 2;
+	justify-content: space-between;
 }
 
 #exobar-btn a {
@@ -161,10 +163,17 @@ img.f-clef {
 	display: flex; align-items: center; justify-content: center;
 	background-color: blue;
 	font-size: 1.5vw;
+	text-align: center; 
+}
+
+.eb-entry.zone {
+	padding: 5px;
+	font-size: 1vw;
+	background-color: darkblue;
 }
 
 #exobar-info {
-	margin-left: 15px;
+	margin: 0px 15px;
 	display: flex; align-items: center;
 	font-size: 1.5vw;
 }
@@ -185,7 +194,7 @@ img.f-clef {
 #toolbar a:hover,
 #toolbar a:focus,
 #toolbar a:active {
-	background-color: white; color: red;
+	background-color: white!important; color: red;
 	text-decoration: none;
 }
 
@@ -196,6 +205,10 @@ img.f-clef {
 	background-color: red;
 	font-size: 2vw;
     text-align: center;
+}
+
+#toolbar .tb-entry:last-child {
+	background-color: darkred;
 }
 
 #toolbar .tb-entry.todo {
@@ -231,6 +244,42 @@ img.f-clef {
 }
 
 #about h2 {
+	text-align: center;
 	font-size: 4rem;
+}
+
+#about .remark {
+	margin-bottom: 30px; 
+	font-size: 1.5rem;
+}
+
+#about button {
+	margin-top: 30px;
+	padding: 20px 50px;
+	position: relative;
+	border: none;
+	background-color: blue; 
+	color: white;
+	font-size: 2rem;
+}
+
+#about button::after {
+	content:"(cliquez)";
+	position: absolute;
+	right: 5px; bottom: 5px;
+	font-size: 1rem;
+}
+
+#about img.bnw {
+	filter:grayscale();
+}
+
+#about div.retour {
+	margin-top: 30px;
+	font-size: 1.5rem;
+}
+
+#about div.retour a {
+	color:white;
 }
 

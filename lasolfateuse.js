@@ -160,6 +160,8 @@ var notePositions = [];
 var stepType = 0; /* Montée par intervalle. 0 = au hasard. */
 var stepNum = 0;  /* Durée de la montée par intervalle, en nombre de notes restantes. */
 
+var zone = "Toutes";
+
 function lectureCleMult ( mult ) {
 	lectureCleIntervalDelay = lectureCleIntervalDelay * mult;
 	lectureCleDisplayInfos ();
@@ -175,13 +177,21 @@ function lectureCleDiff ( ) {
 	if (hard == 0) {
 		hard = 1;
 		$( '#exobar-btn a:nth-of-type(3)' ).html( 'Plus facile !');
+		$( '#exobar-btn a.zone' ).hide();
 	} else {
 		hard = 0;
 		$( '#exobar-btn a:nth-of-type(3)' ).html( 'Plus dur !');
+		$( '#exobar-btn a.zone' ).show();
 	}
 	lectureCleDisplayInfos ();
 }
-							  
+
+function lectureCleZoneHautSOL ( ) { zone = "Haut du SOL"; lectureCleDisplayInfos (); }
+function lectureCleZoneBasSOL  ( ) { zone = "Bas du SOL" ; lectureCleDisplayInfos (); }
+function lectureCleZoneHautFA  ( ) { zone = "Haut du FA" ; lectureCleDisplayInfos (); }
+function lectureCleZoneBasFA   ( ) { zone = "Bas du FA"  ; lectureCleDisplayInfos (); }
+function lectureCleZoneToutes  ( ) { zone = "Toutes"     ; lectureCleDisplayInfos (); }
+
 function lectureClePause ( ) {
 	clearInterval( lectureCleInterval );
 	lectureCleDisplayInfos (' (en pause)');
@@ -194,6 +204,34 @@ function lectureClePlay ( ) {
 		lectureCleIntervalDelay
 	);
 	lectureCleDisplayInfos ();
+}
+
+/**
+ * Clé de la portée 
+ */ 
+function newCleNum() {
+	if (zone.endsWith("SOL"))
+		return 1;                                                       
+	else if (zone.endsWith("FA"))
+		return 2;                                                       
+	else
+		return getRandomInt(2) + 1;                                                       
+}
+
+/**
+ * Ligne de démarrage 
+ */ 
+function newLineNum() {
+	var height, offs;
+	if (hard == 0) {
+		if ( zone == "Toutes"        ) { height =  7; offs = 6; };
+		if ( zone.startsWith("Haut") ) { height = 13; offs = 5; };
+		if ( zone.startsWith("Bas")  ) { height = 13; offs = 12; };
+		return getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - height ) + offs;  
+	}
+	else {
+		return getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 0 ) + 2;  
+	}
 }
 
 function lectureCleStep() {
@@ -211,29 +249,24 @@ function lectureCleStep() {
 		var cleNum;
 		var lineNum;
 		var lastNote = notePositions[ notePositions.length - 1 ]; // May be undefined if empty array
-		if ( (notePositions.length == 0) || (stepNum == 0) || (lastNote.line + stepType > ((hard==0)?14:18)) || (lastNote.line + stepType < ((hard==0)?5:1)) ) {
+		if ( (notePositions.length == 0) || (stepNum == 0) || (lastNote.line + stepType > ( (hard==0) ? 14 : 18 )) || (lastNote.line + stepType < ( (hard==0) ? 5 : 1 )) ) {
 
 			// On enclenche une nouvelle section si la précédente est terminée, ou que l'on est hors de portée.
 			stepType = getRandomInt((hard==0)?3:4);                                             // Intervalle de la montée. 0 = note au hasard. 
 			if ( getRandomInt(2) == 1 ) stepType = 0 - stepType;                                // On monte chérie ? Ou on descend ?
 			stepNum = getRandomInt((hard==0)?6:4) + 1;                                          // Nombre de pas.
 
-			cleNum = getRandomInt(2) + 1;                                                       // Clé de la portée
-			if (hard == 0)                                                                      // Ligne de démarrage.
-				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 6;  
-			else
-				lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 2;  
+			cleNum  = newCleNum();
+			lineNum = newLineNum();
 		} else {
 			// On poursuit la section en cours
 			if (stepType == 0) {
 				if (hard == 0)                                                                      // Ligne de démarrage.
 					cleNum = lastNote.cle;
-				else
-					cleNum = getRandomInt(2) + 1;                                                   // Clé de la portée
-				if (hard == 0)                                                                      // Ligne de démarrage.
-					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length - 7 ) + 6;  
-				else
-					lineNum = getRandomInt( $( '#mainscreen .portee:nth-child(1) .line').length ) + 2;  
+				else {
+					cleNum  = newCleNum();
+				}
+				lineNum = newLineNum();
 			} else {
 				cleNum  = lastNote.cle;
 				lineNum = lastNote.line + stepType;
@@ -253,14 +286,14 @@ function lectureCleStep() {
 	
 	notePositions.forEach ( function (element, index, array) {
 //		$( '#mainscreen .portee:nth-child(' + element.cle + ') .line:nth-child(' + element.line + ')' ).append ( '<div class="note' + ((array.length-index)==11?' middle':'') + '" style="left:' + element.left + '%">&#119128;</div>' );
-	$( '#mainscreen .portee:nth-child(' + element.cle + ') .line:nth-child(' + element.line + ')' ).append ( '<div class="note' + ((array.length-index)==11?' middle':'') + '" style="left:' + element.left + '%">●</div>' );
-});	
+		$( '#mainscreen .portee:nth-child(' + element.cle + ') .line:nth-child(' + element.line + ')' ).append ( '<div class="note' + ((array.length-index)==11?' middle':'') + '" style="left:' + element.left + '%">●</div>' );
+	});	
 
 	/* $( '#exobar-info' ).html( 'stepType='+stepType+' stepNum='+stepNum+' lineNum='+lineNum+' cle='+cleNum); */
 }
 
 function lectureCleDisplayInfos ( str ) {
-	$( '#exobar-info' ).html( ((hard == 0) ? 'Mode 🌺 facile' : 'Mode 💀 difficile') /* + ' - Délai : ' + lectureCleIntervalDelay.toLocaleString() + ' ms' */ + (str ? str : '') );
+	$( '#exobar-info' ).html( ((hard == 0) ? 'Mode :&emsp;🌺 facile' : 'Mode :&emsp;💀 difficile') /* + ' - Délai : ' + lectureCleIntervalDelay.toLocaleString() + ' ms' */ + "<br>Zone :&emsp;" + zone + (str ? str : '') );
 }
 
 function lectureCle () {
@@ -268,11 +301,16 @@ function lectureCle () {
 	addPortee( "g-clef", 8 );
 	addPortee( "f-clef", 8 );
 	
-	$( '#exobar-btn'  ).html( '<a href="#" onclick="lectureCleMult  (1.33) ;" class="eb-entry">Ralentir</a>' + 
-	                          '<a href="#" onclick="lectureCleMult  (0.66) ;" class="eb-entry">Accélerer</a>' + 
-	                          '<a href="#" onclick="lectureCleDiff  (this) ;" class="eb-entry">Plus dur !</a>' + 
-	                          '<a href="#" onclick="lectureClePause ()     ;" class="eb-entry"><i class="material-icons">pause</i></a>' + 
-	                          '<a href="#" onclick="lectureClePlay  ()     ;" class="eb-entry"><i class="material-icons">play_arrow</i></a>' );
+	$( '#exobar-btn'  ).html( '<a href="#" onclick="lectureCleMult        (1.33) ;" class="eb-entry     ">Ralentir</a>' + 
+	                          '<a href="#" onclick="lectureCleMult        (0.66) ;" class="eb-entry     ">Accélerer</a>' + 
+	                          '<a href="#" onclick="lectureCleDiff        (this) ;" class="eb-entry     ">Plus dur !</a>' + 
+	                          '<a href="#" onclick="lectureCleZoneHautSOL (this) ;" class="eb-entry zone">Haut<br>du SOL</a>' + 
+	                          '<a href="#" onclick="lectureCleZoneBasSOL  (this) ;" class="eb-entry zone">Bas<br>du SOL</a>' + 
+	                          '<a href="#" onclick="lectureCleZoneHautFA  (this) ;" class="eb-entry zone">Haut<br>du FA</a>' + 
+	                          '<a href="#" onclick="lectureCleZoneBasFA   (this) ;" class="eb-entry zone">Bas<br>du FA</a>' + 
+	                          '<a href="#" onclick="lectureCleZoneToutes  (this) ;" class="eb-entry zone">Toutes<br>zones</a>' + 
+	                          '<a href="#" onclick="lectureClePause       ()     ;" class="eb-entry     "><i class="material-icons">pause</i></a>' + 
+	                          '<a href="#" onclick="lectureClePlay        ()     ;" class="eb-entry     "><i class="material-icons">play_arrow</i></a>' );
 	lectureCleDisplayInfos ();
 	lectureCleInterval = setInterval(
 		lectureCleStep,
@@ -341,7 +379,7 @@ var gameDescList = [
 	{ label : 'Suite d\'accords'                        , method : 'chordSlideshow'        , subclass : ''    },
 	{ label : 'Trouver les notes par intervalles macro' , method : 'notesViaIntervalMacro' , subclass : ''    },
 	{ label : 'Lecture clés de SOL et FA'               , method : 'lectureCle'            , subclass : ''    },
-	{ label : '?'                                       , method : 'aPropos'               , subclass : ''    }
+	{ label : 'L\'interview...'                         , method : 'aPropos'               , subclass : ''    }
 ];
 
 gameDescList.forEach(
